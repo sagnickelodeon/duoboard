@@ -32,7 +32,7 @@ def verify_password(password: str, hashed: str) -> bool:
     return bcrypt.checkpw(password_bytes, hashed_bytes)
 
 @st.cache_data
-def read_config() -> dict:
+def read_config(coming_from:str) -> dict:
     """
     Reads the config.yaml file from azure
     """
@@ -51,7 +51,7 @@ def check_input_password(username: str, password: str) -> int:
     """
     Checks if user trying to log in is allowed or not
     """
-    config = read_config()
+    config = read_config(coming_from="login")
 
     # not being in config means user hasn't registered
     if username not in config["authorized"]:
@@ -68,7 +68,7 @@ def check_pre_authorization(username: str) -> bool:
     """
     Checks whether user trying to register is pre-authorized to do so
     """
-    config = read_config()
+    config = read_config(coming_from="register")
     return username in config["pre-authorized"]
 
 def add_user(name: str, username: str, hashed_password: str, referral: str) -> bool:
@@ -76,7 +76,7 @@ def add_user(name: str, username: str, hashed_password: str, referral: str) -> b
     Adds provided user and details to the config file and removes from pre-authorized list
     """
     try:
-        config = read_config()
+        config = read_config(coming_from="register")
         config["authorized"][username] = dict()
         config["authorized"][username]["name"] = name
         config["authorized"][username]["password"] = hashed_password
@@ -148,7 +148,7 @@ def check_if_registered(username: str) -> bool:
     """
     Check if user has already registered
     """
-    config = read_config()
+    config = read_config(coming_from="register")
     return username in config["authorized"]
 
 def get_full_name(cookie: dict) -> str:
@@ -157,7 +157,7 @@ def get_full_name(cookie: dict) -> str:
     """
     cookie_string = cookie["duoboard"]
     username, password, validity = cookie_string.split("|")
-    config = read_config()
+    config = read_config(coming_from="login")
     return config["authorized"][username]["name"]
 
 if __name__=="__main__":

@@ -156,6 +156,7 @@ def handle_login():
     if "login_count" not in st.session_state:
         st.session_state["login_count"] = 0
         st.session_state["authentication_status"] = None
+        st.cache_data.clear()
 
     # if authentication_status is True, user is logged in
     if st.session_state["authentication_status"]:
