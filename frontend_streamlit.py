@@ -55,14 +55,20 @@ def display(name: str) -> None:
     # Calculate the total number of pages
     total_pages = len(df) // entries_per_page + (len(df) % entries_per_page > 0)
 
-    # page change option
-    page = st.sidebar.number_input(
-        "Page number",
-        min_value=1,
-        max_value=total_pages,
-        step=1,
-        value=1
-    )
+    # Handle empty DataFrame
+    if total_pages > 0:
+        # Show the number_input when total_pages > 0
+        page = st.sidebar.number_input(
+            "Page number",
+            min_value=1,
+            max_value=total_pages,
+            step=1,
+            value=1
+        )
+    else:
+        # Provide a message or default behavior when the DataFrame is empty
+        st.sidebar.write("No data available to display.")
+        page = 1  # Default page value when no data is available
 
     # Button to go to a specific page (e.g., Page 6)
     if st.sidebar.button("Logout"):
