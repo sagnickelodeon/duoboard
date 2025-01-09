@@ -4,8 +4,8 @@ import re
 import streamlit as st
 from extra_streamlit_components import CookieManager
 
-from frontend.frontend_streamlit import *
-from frontend.auth_helper import *
+from frontend_streamlit import *
+from auth_helper import *
 
 # set global configs
 st.set_page_config(layout="wide", page_title="Duoboard",menu_items={'About': "# This is a header. This is an *extremely* cool app!"},page_icon=":owl:")
