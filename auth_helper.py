@@ -127,6 +127,8 @@ def check_cookie(cookie:dict, id) -> bool:
     if "duoboard" not in cookie:
         return False
     cookie = cookie["duoboard"]
+
+    config = read_config(coming_from="login")
     
     # get individual parts of the cookie
     username, password, registered = cookie.split("|")
@@ -138,7 +140,7 @@ def check_cookie(cookie:dict, id) -> bool:
     # if cookie is present, that means user already logged in before so no need to check password
     # only check if 30 days has passed
     try:
-        if (current_time-registered) <= ONE_MONTH_IN_SECONDS:
+        if (current_time-registered) <= ONE_MONTH_IN_SECONDS and username in config["authorized"]:
             return True
     except Exception as e:
         return False
